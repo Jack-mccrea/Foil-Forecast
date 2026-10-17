@@ -58,13 +58,13 @@ riders:
 
   - name: Robbie
     weight: 80                  # CHECK: Robbie's weight in kg
-    sports: [wing]
-    downwind_level: beginner
+    sports: [wing, downwind, prone]
+    downwind_level: beginner    # beginner, intermediate or advanced
 
     boards:
       - name: 60L wing board
         volume: 60
-        use: [wing]
+        use: [wing, downwind]   # change if he gets or borrows a bigger downwind board
 
     wings:
       - 3.4
@@ -75,11 +75,11 @@ riders:
       - name: Spitfire 840
         area: 950               # estimate; replace if printed on the wing
         type: low
-        use: [wing]
+        use: [wing, prone]
       - name: ART Pro 1201
         area: 1000
         type: high
-        use: [wing]
+        use: [wing, downwind]
 
 # ------------------------------------------------------------
 #  SPOTS
