@@ -1,0 +1,147 @@
+# ============================================================
+#  FOIL FORECAST SETTINGS
+#  Edit this file to add riders, change gear or add spots.
+#  Saving it on GitHub rebuilds the dashboard automatically.
+#
+#  Compass guide (degrees):
+#      N = 0     NE = 45    E = 90     SE = 135
+#      S = 180   SW = 225   W = 270    NW = 315
+#  Wind directions always mean where the wind blows FROM (same as Windy).
+# ============================================================
+
+timezone: Pacific/Auckland
+days: 7
+
+
+# ------------------------------------------------------------
+#  RIDERS
+#  Each rider gets their own view on the dashboard.
+#  Copy a whole block (from "- name:" down) to add someone.
+# ------------------------------------------------------------
+riders:
+
+  - name: Jack
+    weight: 80                  # kg
+    sports: [wing, downwind, prone, sup]   # remove any you don't do
+    downwind_level: beginner    # beginner, intermediate or advanced
+
+    boards:
+      - name: 60L wing board
+        volume: 60              # litres
+        use: [wing]
+      - name: Armstrong 120L
+        volume: 120
+        use: [downwind, sup]
+
+    wings:                      # hand-held wings, size in square metres
+      - 4.0                     # CHECK: put in your actual wing sizes
+      - 5.0
+
+    foils:                      # front wings
+      # area is in square centimetres (printed on most Axis wings)
+      # type: low (surfy, e.g. Spitfire), mid (e.g. ART v2), high (e.g. ART Pro, Fireball)
+      - name: Spitfire 900
+        area: 1050
+        type: low
+        use: [wing, prone, sup]
+      - name: ART Pro 1201
+        area: 1000
+        type: high
+        use: [downwind, wing]
+
+    # Optional: once you know your real wind ranges, override the estimates.
+    # The name must match how the dashboard shows the combo.
+    # overrides:
+    #   "5.0m + Spitfire 900": {min: 12, ideal: [14, 20], max: 24}
+    #   "ART Pro 1201": {min: 16, ideal: [18, 24], max: 30}
+
+    alert_secret: NTFY_TOPIC    # GitHub secret holding this rider's ntfy topic
+
+  # - name: Sam
+  #   weight: 72
+  #   sports: [wing, prone]
+  #   downwind_level: intermediate
+  #   boards:
+  #     - name: 75L board
+  #       volume: 75
+  #       use: [wing]
+  #   wings: [4.2, 5.2]
+  #   foils:
+  #     - name: My front wing
+  #       area: 1100
+  #       type: mid
+  #       use: [wing, prone]
+  #   alert_secret: NTFY_TOPIC_SAM
+
+
+# ------------------------------------------------------------
+#  SPOTS
+#  faces:        which way the beach looks out to sea.
+#                Wind from this direction is onshore, from the opposite is offshore.
+#  swell_window: swell directions that reach the break, going clockwise
+#                from the first number to the second.
+#  offshore_ok:  true only if offshore wind is safe (enclosed water, easy walk back).
+#  marine_lat / marine_lon: optional point slightly out to sea, used if the
+#                wave model has no data right at the beach.
+#  disciplines:  which sports to score here: wing, downwind, prone, sup.
+#
+#  CHECK: the directions below are starting guesses. Fix them from experience.
+# ------------------------------------------------------------
+spots:
+
+  - name: Lyall Bay
+    lat: -41.3290
+    lon: 174.7975
+    marine_lat: -41.36
+    marine_lon: 174.80
+    faces: 180
+    swell_window: [130, 230]
+    offshore_ok: false
+    disciplines: [wing, prone, sup]
+
+  - name: Petone
+    lat: -41.2280
+    lon: 174.8740
+    faces: 180
+    swell_window: [150, 210]
+    offshore_ok: false
+    disciplines: [wing, downwind]
+    downwind:
+      run: Eastbourne to Petone     # the run you actually do
+      wind_from: 180                # best wind direction for the run
+      tolerance: 30                 # degrees either side that still works
+
+  - name: Plimmerton
+    lat: -41.0800
+    lon: 174.8650
+    marine_lat: -41.08
+    marine_lon: 174.82
+    faces: 290
+    swell_window: [230, 330]
+    offshore_ok: false
+    disciplines: [wing, prone]
+
+
+# ------------------------------------------------------------
+#  SURF FOILING (prone and SUP). Wave heights in metres, wind in knots.
+# ------------------------------------------------------------
+prone:
+  min_height: 0.3
+  ideal_height: [0.6, 1.8]
+  max_height: 3.0
+  glassy_wind: 6        # below this, any wind direction is fine
+  calm_wind: 10         # onshore wind above this starts to spoil it
+sup:
+  min_height: 0.2
+  ideal_height: [0.4, 1.5]
+  max_height: 2.5
+  glassy_wind: 5
+  calm_wind: 8
+
+
+# ------------------------------------------------------------
+#  PHONE ALERTS (optional, via the free ntfy app)
+# ------------------------------------------------------------
+alerts:
+  threshold: 7.5        # alert when a session scores at least this
+  lookahead_hours: 48
