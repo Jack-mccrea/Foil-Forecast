@@ -274,6 +274,18 @@ def best_combo(w, combos):
 
 
 # ================================================================ scoring
+
+def gust_penalty(w, g, warn):
+    """Forecast gusts near the coast often run far above what you feel on the water,
+    so the penalty is based on the gust-to-average ratio and capped at 2 points."""
+    if not g or w < 5:
+        return 0.0
+    ratio = g / w
+    if ratio > 1.7:
+        warn.append("gusty")
+    return min(2.0, max(0.0, (ratio - 1.5) * 4))
+
+
 # Each scorer returns (score 0-10, reasons, warnings, gear label or None).
 
 def score_wing(h, spot, combos):
@@ -283,14 +295,10 @@ def score_wing(h, spot, combos):
     s, kit = best_combo(w, combos)
     s *= 0.9  # headroom for the swell bonus
     why, warn = [], []
-    spread = (g or w) - w
-    if spread > 6:
-        s -= min(5, (spread - 6) * 0.6)
-    if spread > 9:
-        warn.append("gusty")
+    s -= gust_penalty(w, g, warn)
     rel = angdiff(d, spot["faces"])
     if rel <= 30:
-        s *= 0.8
+        s *= 1.0 if spot.get("onshore_ok") else 0.9
         why.append("onshore")
     elif rel <= 120:
         why.append("cross-shore")
@@ -302,14 +310,14 @@ def score_wing(h, spot, combos):
         s *= 0.6 if spot.get("offshore_ok") else 0.15
         why.append("offshore")
         warn.append("offshore wind, drift risk")
-    hgt = first(h.get("wave_height"), h.get("swell_wave_height"))
+    hgt = first(h.get("swell_wave_height"), h.get("wave_height"))
     if hgt is not None:
-        if 0.4 <= hgt <= 2.2:
+        if 0.4 <= hgt <= 3.0:
             s += 1
             why.append("swell to ride")
-        elif hgt > 3:
-            s -= 3
-            warn.append("big seas")
+        elif hgt > 3.5:
+            s -= 1.5
+            warn.append("big swell")
     if kit is None:
         why.insert(0, "too light" if w < 12 else "too strong for your gear")
     return clamp(s), why, warn, kit
@@ -345,10 +353,7 @@ def score_downwind(h, spot, combos):
         s *= 0.85
     else:
         why.append("good bumps")
-    spread = (g or w) - w
-    if spread > 8:
-        s -= min(4, (spread - 8) * 0.4)
-        warn.append("gusty")
+    s -= gust_penalty(w, g, warn)
     return clamp(s), why, warn, kit
 
 
@@ -469,7 +474,14 @@ def build(cfg, demo=False):
     tz = ZoneInfo(cfg["timezone"])
     weather = {}
     for n, spot in enumerate(cfg["spots"]):
-        weather[spot["name"]] = demo_spot(spot, cfg, n + 7) if demo else fetch_spot(spot, cfg)
+        hours, daylight = demo_spot(spot, cfg, n + 7) if demo else fetch_spot(spot, cfg)
+        factor = spot.get("wave_factor", 1.0)
+        if factor != 1.0:  # scale offshore wave data to what reaches the beach
+            for h in hours:
+                for v in ("wave_height", "wind_wave_height", "swell_wave_height"):
+                    if h.get(v) is not None:
+                        h[v] = round(h[v] * factor, 2)
+        weather[spot["name"]] = (hours, daylight)
     riders = []
     for rider in cfg["riders"]:
         combos = build_combos(rider)
