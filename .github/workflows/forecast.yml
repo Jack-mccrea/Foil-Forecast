@@ -30,7 +30,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python foil_forecast.py --out site/index.html
         env:
-          SECRETS_JSON: ${{ toJSON(secrets) }}   # lets each rider name their own alert secret
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
