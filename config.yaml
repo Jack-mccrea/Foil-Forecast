@@ -57,20 +57,24 @@ riders:
 
     alert_secret: NTFY_TOPIC    # GitHub secret holding this rider's ntfy topic
 
-  # - name: Sam
-  #   weight: 72
+  # - name: Rob
+  #   weight: 83
   #   sports: [wing, prone]
   #   downwind_level: intermediate
   #   boards:
-  #     - name: 75L board
-  #       volume: 75
+  #     - name: 60L board
+  #       volume: 60
   #       use: [wing]
-  #   wings: [4.2, 5.2]
+  #   wings: [3.5, 4.5, 5.0]
   #   foils:
-  #     - name: My front wing
-  #       area: 1100
-  #       type: mid
-  #       use: [wing, prone]
+      - name: Spitfire 840
+        area: 950
+        type: low
+        use: [wing, prone, sup]
+      - name: ART Pro 1201
+        area: 1000
+        type: high
+        use: [downwind, wing]
   #   alert_secret: NTFY_TOPIC_SAM
 
 
@@ -120,6 +124,22 @@ spots:
     swell_window: [230, 330]
     offshore_ok: false
     disciplines: [wing, prone]
+
+  - name: Evans Bay (Shark Bay)
+    lat: -41.3000          # replace with your launch spot
+    lon: 174.8000          # replace with your launch spot
+    faces: 90              # replace: direction you look out to sea from the launch
+    swell_window: [0, 0]
+    offshore_ok: true
+    disciplines: [wing]
+
+  - name: Worser Bay
+    lat: -41.3150
+    lon: 174.8290
+    faces: 90
+    swell_window: [150, 200]
+    offshore_ok: false
+    disciplines: [wing]
 
 
 # ------------------------------------------------------------
