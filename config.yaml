@@ -34,8 +34,8 @@ riders:
         use: [downwind, sup]
 
     wings:                      # hand-held wings, size in square metres
-      - 3.5                     # CHECK: put in your actual wing sizes
-      - 4.5
+      - 3.5
+      - 4.5                     # add any other sizes you own on new lines
 
     foils:                      # front wings
       # area is in square centimetres (printed on most Axis wings)
@@ -52,31 +52,34 @@ riders:
     # Optional: once you know your real wind ranges, override the estimates.
     # The name must match how the dashboard shows the combo.
     # overrides:
-    #   "5.0m + Spitfire 900": {min: 12, ideal: [14, 20], max: 24}
-    #   "ART Pro 1201": {min: 16, ideal: [18, 24], max: 30}
+    #   "4.5m + Spitfire 900": {min: 13, ideal: [16, 22], max: 28}
 
     alert_secret: NTFY_TOPIC    # GitHub secret holding this rider's ntfy topic
 
-  # - name: Rob
-  #   weight: 83
-  #   sports: [wing, prone]
-  #   downwind_level: intermediate
-  #   boards:
-  #     - name: 60L board
-  #       volume: 60
-  #       use: [wing]
-  #   wings: [3.5, 4.5, 5.0]
-  #   foils:
+  - name: Robbie
+    weight: 80                  # CHECK: Robbie's weight in kg
+    sports: [wing]
+    downwind_level: beginner
+
+    boards:
+      - name: 60L wing board
+        volume: 60
+        use: [wing]
+
+    wings:
+      - 3.4
+      - 4.5
+      - 5.0
+
+    foils:
       - name: Spitfire 840
-        area: 950
+        area: 950               # estimate; replace if printed on the wing
         type: low
-        use: [wing, prone, sup]
+        use: [wing]
       - name: ART Pro 1201
         area: 1000
         type: high
-        use: [downwind, wing]
-  #   alert_secret: NTFY_TOPIC_SAM
-
+        use: [wing]
 
 # ------------------------------------------------------------
 #  SPOTS
@@ -85,6 +88,8 @@ riders:
 #  swell_window: swell directions that reach the break, going clockwise
 #                from the first number to the second.
 #  offshore_ok:  true only if offshore wind is safe (enclosed water, easy walk back).
+#  onshore_ok:   true if onshore wind is normal and fun at this spot (no score penalty).
+#  wave_factor:  optional, e.g. 0.8 if the beach only gets about 80% of the offshore wave height.
 #  marine_lat / marine_lon: optional point slightly out to sea, used if the
 #                wave model has no data right at the beach.
 #  disciplines:  which sports to score here: wing, downwind, prone, sup.
@@ -101,7 +106,24 @@ spots:
     faces: 180
     swell_window: [130, 230]
     offshore_ok: false
+    onshore_ok: true            # southerly onshore is a normal good session here
     disciplines: [wing, prone, sup]
+
+  - name: Worser Bay
+    lat: -41.3150
+    lon: 174.8290
+    faces: 90                   # looks east across the harbour; N and S are cross-shore
+    swell_window: [150, 200]
+    offshore_ok: false          # westerlies are blocked by the hills and push you out
+    disciplines: [wing]
+
+  - name: Evans Bay (Shark Bay)
+    lat: -41.3000               # CHECK: long-press your launch spot in Google Maps
+    lon: 174.8000               # CHECK
+    faces: 90                   # CHECK: compass direction you look out from the launch
+    swell_window: [0, 0]        # flat water, no swell
+    offshore_ok: true           # enclosed bay
+    disciplines: [wing]
 
   - name: Petone
     lat: -41.2280
@@ -124,23 +146,6 @@ spots:
     swell_window: [230, 330]
     offshore_ok: false
     disciplines: [wing, prone]
-
-  - name: Evans Bay (Shark Bay)
-    lat: -41.3000          # replace with your launch spot
-    lon: 174.8000          # replace with your launch spot
-    faces: 90              # replace: direction you look out to sea from the launch
-    swell_window: [0, 0]
-    offshore_ok: true
-    disciplines: [wing]
-
-  - name: Worser Bay
-    lat: -41.3150
-    lon: 174.8290
-    faces: 90
-    swell_window: [150, 200]
-    offshore_ok: false
-    disciplines: [wing]
-
 
 # ------------------------------------------------------------
 #  SURF FOILING (prone and SUP). Wave heights in metres, wind in knots.
