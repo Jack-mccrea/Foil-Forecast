@@ -1,0 +1,46 @@
+name: Foil forecast
+
+on:
+  schedule:
+    - cron: "0 17 * * *"   # 6am NZDT (5am NZST)
+    - cron: "0 23 * * *"   # 12pm NZDT (11am NZST)
+  push:                     # rebuild straight away when settings or code change
+    paths:
+      - config.yaml
+      - foil_forecast.py
+  workflow_dispatch:        # "Run workflow" button for an on-demand refresh
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python foil_forecast.py --out site/index.html
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}   # lets each rider name their own alert secret
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
