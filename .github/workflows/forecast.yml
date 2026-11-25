@@ -2,13 +2,11 @@ name: Foil forecast
 
 on:
   schedule:
-    - cron: "0 17 * * *"   # 6am NZDT (5am NZST)
-    - cron: "0 23 * * *"   # 12pm NZDT (11am NZST)
-  push:                     # rebuild straight away when settings or code change
-    paths:
-      - config.yaml
-      - foil_forecast.py
-  workflow_dispatch:        # "Run workflow" button for an on-demand refresh
+    - cron: "0 17 * * *"   # 6am NZDT: phone alerts and classic dashboard
+    - cron: "0 23 * * *"   # 12pm NZDT
+  push:                     # publish the app straight away when anything changes
+    branches: [main]
+  workflow_dispatch:        # "Run workflow" button for an on-demand rebuild
 
 permissions:
   contents: read
@@ -23,15 +21,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python foil_forecast.py --out site/index.html
+
+      - name: Build the app
+        run: |
+          mkdir -p site
+          cp index.html style.css scoring.js app.js sw.js manifest.webmanifest icon.svg icon-192.png icon-512.png site/
+          python -c "import yaml, json; json.dump(yaml.safe_load(open('config.yaml')), open('site/config.json', 'w'), indent=1)"
+          sed -i "s/__BUILD__/${GITHUB_SHA::8}/" site/sw.js
+
+      - name: Classic dashboard and phone alerts
+        continue-on-error: true   # a forecast hiccup here never blocks the app
+        run: python foil_forecast.py --out site/classic.html
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-      - uses: actions/upload-pages-artifact@v3
+
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -43,4 +52,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
