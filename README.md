@@ -1,15 +1,21 @@
-# Foil forecast
+# Foil Forecast
 
-A dashboard that scores every daylight hour for the next 7 days for wing, downwind, prone and SUP foiling, matched to each rider's own weight and gear. It updates itself twice a day, and you open it on your phone like an app.
+An installable phone app that scores every daylight hour for the next 7 days for wing, downwind, prone and SUP foiling, matched to each rider's own weight and gear. It fetches a live forecast from Open-Meteo every time you open it, and works offline with the last forecast it loaded.
 
-Scores have two layers:
+Open it at `https://jack-mccrea.github.io/Foil-Forecast/`, then add it to your home screen (iPhone: Share, Add to Home Screen; Android: Install app).
 
-- **Conditions:** Wind direction against the beach, gusts, and swell size, period and direction. These are the same for everyone.
-- **Gear fit:** Whether the wind suits your weight, board, wing size and front wing. The dashboard tells you which combo to take.
+- **Forecast:** next good session, the rest of the week's best bets, and hour-by-hour scores with wind, swell, model tide and water temperature. Filter by sport and spot.
+- **Gear:** riders, boards, hand wings and front wings, edited in the app. See and override each combo's wind range.
+- **Spots:** beach direction, swell window, hill-shadow winds, wave factor, downwind run. "Use my current location" sets a spot's position from the beach.
+- **Sessions:** log how a session felt and see where the forecast reads high or low for each spot.
 
-Forecast data comes from Open-Meteo, which is free and needs no key.
+Settings you change in the app are saved on that phone. `config.yaml` holds the shared defaults every phone starts with; to make your phone's settings the default, use Gear, Copy settings, and paste over the contents of `config.yaml` on GitHub.
+
+The app lives in `app/`. The GitHub workflow publishes it on every change to `app/`, `config.yaml` or the workflow, and twice a day also builds the classic dashboard (`classic.html`) and sends optional ntfy phone alerts with `foil_forecast.py`.
 
 ---
+
+## Classic dashboard notes (unchanged)
 
 ## Option A: Join an existing dashboard (no setup)
 

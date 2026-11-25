@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Foil Forecast</title>
+<meta name="description" content="Live wing, downwind, prone and SUP foiling forecast scored for your own gear.">
+<meta name="theme-color" content="#0F2A33">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Foil">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 40c8-6 16-6 24 0s16 6 28 0" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M30 34V14m-12 0h24" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+      <span>Foil Forecast</span>
+    </div>
+    <div class="riders" id="riders" role="group" aria-label="Rider"></div>
+  </div>
+</header>
+<main id="view" class="wrap" tabindex="-1">
+  <p class="loading">Loading the forecast…</p>
+</main>
+<nav class="tabs" aria-label="Sections">
+  <button type="button" data-view="forecast" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3-3 6-3 9 0s6 3 9 0M3 10c3-3 6-3 9 0s6 3 9 0"/></svg>Forecast</button>
+  <button type="button" data-view="gear"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v14M5 17h14M8 21h8M4 9c3-2 5-2 8 0s5 2 8 0"/></svg>Gear</button>
+  <button type="button" data-view="spots"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-6.2-6-11a6 6 0 0 1 12 0c0 4.8-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>Spots</button>
+  <button type="button" data-view="log"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 9h8M8 13h8M8 17h5"/></svg>Sessions</button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="scoring.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

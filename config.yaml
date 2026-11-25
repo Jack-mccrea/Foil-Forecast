@@ -89,6 +89,7 @@ riders:
 #                from the first number to the second.
 #  offshore_ok:  true only if offshore wind is safe (enclosed water, easy walk back).
 #  onshore_ok:   true if onshore wind is normal and fun at this spot (no score penalty).
+#  blocked_wind: optional wind directions blocked by land, e.g. [260, 320]. Scores drop and flag patchy wind.
 #  wave_factor:  optional, e.g. 0.8 if the beach only gets about 80% of the offshore wave height.
 #  marine_lat / marine_lon: optional point slightly out to sea, used if the
 #                wave model has no data right at the beach.
@@ -115,6 +116,7 @@ spots:
     faces: 90                   # looks east across the harbour; N and S are cross-shore
     swell_window: [150, 200]
     offshore_ok: false          # westerlies are blocked by the hills and push you out
+    blocked_wind: [260, 320]    # W to NW: hill shadow makes it rough and patchy (adjust from experience)
     disciplines: [wing]
 
   - name: Evans Bay (Shark Bay)
